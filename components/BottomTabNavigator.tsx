@@ -2,10 +2,10 @@ import React, { useEffect, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Animated, Text, StyleSheet, Easing } from "react-native";
 
-import HomeScreen from "@/app/screens/HomeScreen";
-import CalendarScreen from "@/app/screens/CalendarScreen";
-import ChatScreen from "@/app/screens/ChatScreen";
-import ProfileScreen from "@/app/screens/ProfileScreen";
+import HomeScreen from "@/screens/tab-navigator/home-screen";
+import CalendarScreen from "@/screens/tab-navigator/calendar-screen";
+import ChatScreen from "@/screens/tab-navigator/chat-screen";
+import ProfileScreen from "@/screens/tab-navigator/profile-screen";
 
 import {
   CalendarIcon,

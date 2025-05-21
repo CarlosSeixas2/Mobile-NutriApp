@@ -13,15 +13,24 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useState, useRef } from "react";
 import { fetchAddressFromCep } from "@/services/fetch-cep-adress";
+import { useFormContext } from "@/context/FormContext";
 
-export default function RegisterStep2Screen() {
-  const [cep, setCep] = useState("");
-  const [street, setStreet] = useState("");
-  const [neighborhood, setNeighborhood] = useState("");
-  const [city, setCity] = useState("");
-  const [complement, setComplement] = useState("");
+export default function RegisterStep3Screen() {
+  const { formData, updateFormData, nextStep, prevStep } = useFormContext();
+
+  const [cep, setCep] = useState(formData.cep);
+  const [street, setStreet] = useState(formData.street);
+  const [neighborhood, setNeighborhood] = useState(formData.neighborhood);
+  const [city, setCity] = useState(formData.city);
+  const [complement, setComplement] = useState(formData.complement);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({
+    cep: false,
+    street: false,
+    neighborhood: false,
+    city: false,
+  });
 
   const streetRef = useRef<TextInput>(null);
   const neighborhoodRef = useRef<TextInput>(null);
@@ -83,16 +92,47 @@ export default function RegisterStep2Screen() {
     }
   };
 
-  const handleSubmit = () => {
-    if (!cep || !street || !neighborhood || !city) {
+  const validateForm = () => {
+    const newErrors = {
+      cep: cep.replace(/\D/g, "").length !== 8,
+      street: street.trim() === "",
+      neighborhood: neighborhood.trim() === "",
+      city: city.trim() === "",
+    };
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error);
+  };
+
+  const handleContinue = () => {
+    if (validateForm()) {
+      updateFormData({
+        cep,
+        street,
+        neighborhood,
+        city,
+        complement,
+      });
+
+      nextStep();
+    } else {
       Alert.alert(
         "Campos obrigatórios",
         "Por favor, preencha todos os campos obrigatórios."
       );
-      return;
     }
+  };
 
-    Alert.alert("Sucesso", "Endereço cadastrado com sucesso!");
+  const handleBack = () => {
+    updateFormData({
+      cep,
+      street,
+      neighborhood,
+      city,
+      complement,
+    });
+
+    prevStep();
   };
 
   return (
@@ -106,24 +146,26 @@ export default function RegisterStep2Screen() {
         >
           <View style={styles.imageContainer}>
             <Image
-              source={require("../assets/images/image-login.jpg")}
+              source={require("../../assets/images/image-login.jpg")}
               style={styles.imageTop}
               resizeMode="cover"
             />
           </View>
 
           <View style={styles.formContainer}>
-            <Text style={styles.title}>Criar Conta</Text>
+            <Text style={styles.title}>Endereço</Text>
             <Text style={styles.subtitle}>
-              Comece a aprender criando sua conta
+              Informe seu endereço para continuar
             </Text>
 
             <Text style={styles.inputLabel}>CEP</Text>
-            <View style={styles.inputContainer}>
+            <View
+              style={[styles.inputContainer, errors.cep && styles.inputError]}
+            >
               <Icon
                 name="location-outline"
                 size={20}
-                color="#4285F4"
+                color={errors.cep ? "#FF3B30" : "#4285F4"}
                 style={styles.icon}
               />
               <TextInput
@@ -145,13 +187,21 @@ export default function RegisterStep2Screen() {
                 />
               )}
             </View>
+            {errors.cep && (
+              <Text style={styles.errorText}>CEP válido é obrigatório</Text>
+            )}
 
             <Text style={styles.inputLabel}>Rua</Text>
-            <View style={styles.inputContainer}>
+            <View
+              style={[
+                styles.inputContainer,
+                errors.street && styles.inputError,
+              ]}
+            >
               <Icon
                 name="map-outline"
                 size={20}
-                color="#4285F4"
+                color={errors.street ? "#FF3B30" : "#4285F4"}
                 style={styles.icon}
               />
               <TextInput
@@ -161,18 +211,31 @@ export default function RegisterStep2Screen() {
                 style={styles.textInput}
                 keyboardType="default"
                 value={street}
-                onChangeText={setStreet}
+                onChangeText={(text) => {
+                  setStreet(text);
+                  if (errors.street && text.trim() !== "") {
+                    setErrors((prev) => ({ ...prev, street: false }));
+                  }
+                }}
                 returnKeyType="next"
                 onSubmitEditing={() => neighborhoodRef.current?.focus()}
               />
             </View>
+            {errors.street && (
+              <Text style={styles.errorText}>Rua é obrigatória</Text>
+            )}
 
             <Text style={styles.inputLabel}>Bairro</Text>
-            <View style={styles.inputContainer}>
+            <View
+              style={[
+                styles.inputContainer,
+                errors.neighborhood && styles.inputError,
+              ]}
+            >
               <Icon
                 name="home-outline"
                 size={20}
-                color="#4285F4"
+                color={errors.neighborhood ? "#FF3B30" : "#4285F4"}
                 style={styles.icon}
               />
               <TextInput
@@ -182,18 +245,28 @@ export default function RegisterStep2Screen() {
                 style={styles.textInput}
                 keyboardType="default"
                 value={neighborhood}
-                onChangeText={setNeighborhood}
+                onChangeText={(text) => {
+                  setNeighborhood(text);
+                  if (errors.neighborhood && text.trim() !== "") {
+                    setErrors((prev) => ({ ...prev, neighborhood: false }));
+                  }
+                }}
                 returnKeyType="next"
                 onSubmitEditing={() => cityRef.current?.focus()}
               />
             </View>
+            {errors.neighborhood && (
+              <Text style={styles.errorText}>Bairro é obrigatório</Text>
+            )}
 
             <Text style={styles.inputLabel}>Cidade</Text>
-            <View style={styles.inputContainer}>
+            <View
+              style={[styles.inputContainer, errors.city && styles.inputError]}
+            >
               <Icon
                 name="business-outline"
                 size={20}
-                color="#4285F4"
+                color={errors.city ? "#FF3B30" : "#4285F4"}
                 style={styles.icon}
               />
               <TextInput
@@ -203,11 +276,19 @@ export default function RegisterStep2Screen() {
                 style={styles.textInput}
                 keyboardType="default"
                 value={city}
-                onChangeText={setCity}
+                onChangeText={(text) => {
+                  setCity(text);
+                  if (errors.city && text.trim() !== "") {
+                    setErrors((prev) => ({ ...prev, city: false }));
+                  }
+                }}
                 returnKeyType="next"
                 onSubmitEditing={() => complementRef.current?.focus()}
               />
             </View>
+            {errors.city && (
+              <Text style={styles.errorText}>Cidade é obrigatória</Text>
+            )}
 
             <Text style={styles.inputLabel}>Complemento</Text>
             <View style={styles.inputContainer}>
@@ -231,9 +312,18 @@ export default function RegisterStep2Screen() {
           </View>
         </ScrollView>
 
-        <TouchableOpacity style={styles.registerButton} onPress={handleSubmit}>
-          <Text style={styles.registerButtonText}>Cadastrar</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={handleBack}>
+            <Text style={styles.backButtonText}>Voltar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.continueButton}
+            onPress={handleContinue}
+          >
+            <Text style={styles.continueButtonText}>Continuar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -264,7 +354,7 @@ const styles = StyleSheet.create({
   },
   imageTop: {
     width: "100%",
-    height: 240,
+    height: 230,
   },
   formContainer: {
     flex: 1,
@@ -299,6 +389,16 @@ const styles = StyleSheet.create({
     height: 48,
     paddingHorizontal: 12,
   },
+  inputError: {
+    borderColor: "#FF3B30",
+    borderWidth: 1,
+  },
+  errorText: {
+    color: "#FF3B30",
+    fontSize: 12,
+    marginBottom: 12,
+    marginLeft: 4,
+  },
   icon: {
     marginRight: 8,
   },
@@ -310,15 +410,36 @@ const styles = StyleSheet.create({
   loader: {
     marginLeft: 8,
   },
-  registerButton: {
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 24,
+    marginBottom: 25,
+  },
+  backButton: {
+    backgroundColor: "#FFFFFF",
+    paddingVertical: 14,
+    borderRadius: 25,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#4285F4",
+    flex: 1,
+    marginRight: 8,
+  },
+  backButtonText: {
+    color: "#4285F4",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  continueButton: {
     backgroundColor: "#4285F4",
     paddingVertical: 14,
     borderRadius: 25,
     alignItems: "center",
-    marginHorizontal: 24,
-    marginBottom: 25,
+    flex: 1,
+    marginLeft: 8,
   },
-  registerButtonText: {
+  continueButtonText: {
     color: "#FFF",
     fontWeight: "bold",
     fontSize: 16,
