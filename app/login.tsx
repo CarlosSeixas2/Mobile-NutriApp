@@ -15,14 +15,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AntDesign from "react-native-vector-icons/AntDesign";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, router } from "expo-router";
 import { useUserContext } from "@/context/UserContext";
 import * as SecureStore from "expo-secure-store";
 import { validateEmail, validatePassword } from "@/utils/validations";
 
 export default function LoginScreen() {
-  const { loginUser } = useUserContext();
+  const { loginUser, LoginWithToken } = useUserContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -36,6 +36,10 @@ export default function LoginScreen() {
     password: "",
     mensage: "",
   });
+
+  useEffect(() => {
+    LoginWithToken();
+  }, []);
 
   const validateForm = () => {
     const emailError = validateEmail(email);

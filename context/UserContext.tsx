@@ -14,9 +14,11 @@ import {
 } from "@/interfaces/user-interfaces";
 import { PatientCreate } from "@/interfaces/patient-interfaces";
 import { ProfessionalCreate } from "@/interfaces/professional-interface";
+import { router } from "expo-router";
 
 interface UserContextType {
   currentUser: UserData | null;
+  token: string | null;
   registerUser: (data: UserRegister) => Promise<PatientCreate | undefined>;
   registerPatient: (data: PatientCreate) => Promise<PatientCreate | undefined>;
   registerProfessional: (
@@ -27,6 +29,7 @@ interface UserContextType {
   getUser: () => Promise<UserData | undefined>;
   findByEmail: (email: string) => Promise<UserData | null>;
   findByCpf: (cpf: string) => Promise<UserData | null>;
+  LoginWithToken: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -139,10 +142,20 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
     return null;
   };
 
+  // 🔹 Redirecionar
+  const LoginWithToken = async () => {
+    const storedToken = await SecureStore.getItemAsync("token");
+
+    if (storedToken) {
+      router.replace("/app");
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
         currentUser,
+        token,
         registerUser,
         registerPatient,
         registerProfessional,
@@ -151,6 +164,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
         getUser,
         findByEmail,
         findByCpf,
+        LoginWithToken,
       }}
     >
       {children}

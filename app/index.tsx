@@ -2,8 +2,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { router } from "expo-router";
+import { useEffect } from "react";
+import { useUserContext } from "@/context/UserContext";
 
 export default function App() {
+  const { LoginWithToken } = useUserContext();
+
+  useEffect(() => {
+    LoginWithToken();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="dark" />

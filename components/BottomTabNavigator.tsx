@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Animated, Text, StyleSheet, Easing } from "react-native";
+import { Animated, Text, StyleSheet, Easing, BackHandler } from "react-native";
 
 import HomeScreen from "@/screens/tab-navigator/home-screen";
 import CalendarScreen from "@/screens/tab-navigator/calendar-screen";
@@ -60,6 +60,18 @@ const TabBarIcon = ({
 };
 
 export default function BottomTabNavigator() {
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        // impede voltar para a tela anterior
+        return true;
+      }
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   return (
     <Tab.Navigator
       screenOptions={{
