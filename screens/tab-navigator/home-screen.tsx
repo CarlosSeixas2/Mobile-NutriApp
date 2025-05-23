@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  TouchableOpacity,
   TextInput,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,10 +14,15 @@ import {
   ChevronRight,
   Star,
   CheckCircle,
-  Home,
-  Calendar as CalendarIcon,
-  MessageSquare,
-  User,
+  MapPin,
+  Stethoscope,
+  Apple,
+  Pill,
+  Brain,
+  Bone,
+  Eye,
+  Heart,
+  ClipboardPlus,
 } from "lucide-react-native";
 
 export default function HomeScreen() {
@@ -74,7 +78,7 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Serviços</Text>
+          <Text style={styles.sectionTitle}>Especialidades</Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -84,63 +88,81 @@ export default function HomeScreen() {
               <View
                 style={[styles.serviceIcon, { backgroundColor: "#E8F5FE" }]}
               >
-                <Text style={{ color: "#4485FD", fontSize: 20 }}>⚕</Text>
+                <Stethoscope color="#4485FD" size={24} />
               </View>
-              <Text style={styles.serviceText}>Dentista</Text>
+              <Text style={styles.serviceText}>Clínico Geral</Text>
             </View>
 
             <View style={styles.serviceItem}>
               <View
-                style={[styles.serviceIcon, { backgroundColor: "#E8F5FE" }]}
+                style={[styles.serviceIcon, { backgroundColor: "#E6F7ED" }]}
               >
-                <Text style={{ color: "#4485FD", fontSize: 20 }}>👤</Text>
+                <Apple color="#2AC769" size={24} />
               </View>
               <Text style={styles.serviceText}>Nutricionista</Text>
             </View>
 
             <View style={styles.serviceItem}>
               <View
-                style={[styles.serviceIcon, { backgroundColor: "#E8F5FE" }]}
+                style={[styles.serviceIcon, { backgroundColor: "#E8FEF5" }]}
               >
-                <Text style={{ color: "#4485FD", fontSize: 20 }}>🔗</Text>
+                <Brain color="#44FDA5" size={24} />
               </View>
-              <Text style={styles.serviceText}>Educação</Text>
+              <Text style={styles.serviceText}>Psicólogo</Text>
             </View>
 
             <View style={styles.serviceItem}>
               <View
-                style={[styles.serviceIcon, { backgroundColor: "#E8F5FE" }]}
+                style={[styles.serviceIcon, { backgroundColor: "#FFE9E5" }]}
               >
-                <Text style={{ color: "#4485FD", fontSize: 20 }}>📚</Text>
+                <Heart color="#FF6B45" size={24} />
               </View>
-              <Text style={styles.serviceText}>Esportes</Text>
+              <Text style={styles.serviceText}>Cardiologista</Text>
+            </View>
+
+            <View style={styles.serviceItem}>
+              <View
+                style={[styles.serviceIcon, { backgroundColor: "#EEE6FF" }]}
+              >
+                <Eye color="#8F6CFF" size={24} />
+              </View>
+              <Text style={styles.serviceText}>Oftalmologista</Text>
             </View>
 
             <View style={styles.serviceItem}>
               <View
                 style={[styles.serviceIcon, { backgroundColor: "#FEF5E8" }]}
               >
-                <Text style={{ color: "#FDA544", fontSize: 20 }}>💊</Text>
+                <Pill color="#FDA544" size={24} />
               </View>
-              <Text style={styles.serviceText}>Farmácia</Text>
+              <Text style={styles.serviceText}>Farmacêutico</Text>
             </View>
 
             <View style={styles.serviceItem}>
               <View
                 style={[styles.serviceIcon, { backgroundColor: "#F5E8FE" }]}
               >
-                <Text style={{ color: "#A544FD", fontSize: 20 }}>🏥</Text>
+                <Bone color="#A544FD" size={24} />
               </View>
-              <Text style={styles.serviceText}>Hospital</Text>
+              <Text style={styles.serviceText}>Ortopedista</Text>
             </View>
 
             <View style={styles.serviceItem}>
               <View
-                style={[styles.serviceIcon, { backgroundColor: "#E8FEF5" }]}
+                style={[styles.serviceIcon, { backgroundColor: "#FFE8F5" }]}
               >
-                <Text style={{ color: "#44FDA5", fontSize: 20 }}>🧠</Text>
+                <ClipboardPlus color="#FD44A5" size={24} />
               </View>
-              <Text style={styles.serviceText}>Psicologia</Text>
+              <Text style={styles.serviceText}>Dermatologista</Text>
+            </View>
+
+            <View style={styles.serviceItem}>
+              <View
+                style={[styles.serviceIcon, { backgroundColor: "#E8F0FF" }]}
+              >
+                <Stethoscope color="#4469FD" size={24} />
+              </View>
+              <Text style={styles.serviceText}>Odontologia</Text>
             </View>
           </ScrollView>
         </View>
@@ -154,10 +176,11 @@ export default function HomeScreen() {
                 style={styles.recentDoctorImage}
               />
               <View style={styles.recentDoctorInfo}>
-                <Text style={styles.recentDoctorName}>Dr. Joseph Brostito</Text>
+                <Text style={styles.recentDoctorName}>Dr. Joseph</Text>
                 <Text style={styles.recentDoctorSpecialty}>Dentista</Text>
               </View>
               <View style={styles.distanceContainer}>
+                <MapPin color="#8696BB" size={16} />
                 <Text style={styles.distanceText}>1.2 KM</Text>
               </View>
             </View>
@@ -275,7 +298,7 @@ const styles = StyleSheet.create({
   },
   sectionContainer: {
     marginHorizontal: 20,
-    marginBottom: 40,
+    marginBottom: 35,
   },
   sectionTitle: {
     fontSize: 18,
@@ -337,6 +360,9 @@ const styles = StyleSheet.create({
     color: "#8696BB",
   },
   distanceContainer: {
+    flexDirection: "row",
+    gap: 4,
+    alignItems: "center",
     backgroundColor: "#F5F5F5",
     borderRadius: 12,
     paddingHorizontal: 8,

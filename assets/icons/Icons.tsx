@@ -15,20 +15,20 @@ type Props = {
 
 export function CalendarIcon({ color, focused }: Props) {
   const IconComponent = focused ? CalendarFocus : Calendar;
-  return <IconComponent width={24} height={24} />;
+  return <IconComponent width={22} height={22} />;
 }
 
 export function HomeIcon({ color, focused }: Props) {
   const IconComponent = focused ? HomeFocus : Home;
-  return <IconComponent width={24} height={24} />;
+  return <IconComponent width={23} height={23} />;
 }
 
 export function MessageIcon({ color, focused }: Props) {
   const IconComponent = focused ? MessageFocus : Message;
-  return <IconComponent width={24} height={24} />;
+  return <IconComponent width={23} height={23} />;
 }
 
 export function ProfileIcon({ color, focused }: Props) {
   const IconComponent = focused ? ProfileFocus : Profile;
-  return <IconComponent width={24} height={24} />;
+  return <IconComponent width={23} height={23} />;
 }

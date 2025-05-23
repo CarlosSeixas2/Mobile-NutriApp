@@ -7,7 +7,11 @@ export default function RootLayout() {
   return (
     <FormProvider>
       <UserProvider>
-        <Stack screenOptions={{ headerShown: false }}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
           <Stack.Screen name="index" />
           <Stack.Screen name="app" />
           <Stack.Screen name="login" />

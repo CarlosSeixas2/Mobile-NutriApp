@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Calendar, Clock } from "lucide-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CalendarScreen() {
   const [activeTab, setActiveTab] = useState("Marcados");
@@ -42,7 +43,7 @@ export default function CalendarScreen() {
   ];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={[styles.tab, activeTab === "Pendentes" && styles.activeTab]}
@@ -122,7 +123,7 @@ export default function CalendarScreen() {
           </View>
         ))}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

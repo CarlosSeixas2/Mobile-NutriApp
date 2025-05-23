@@ -95,7 +95,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
   const loginUser = async (data: UserLogin): Promise<any> => {
     try {
       const response = await api.post("users/login", data, defaultHeaders);
-      if (response.status === 201) return response.data;
+      if (response.status === 201) {
+        setToken(response.data.token);
+
+        return response.data;
+      }
     } catch (error) {
       console.log("Erro ao fazer login:", error);
       return null;
